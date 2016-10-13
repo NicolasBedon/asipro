@@ -27,9 +27,8 @@
 void
 usage (FILE * fdo, const char *name)
 {
-  fprintf (fdo, "Utilisation: %s nomfichierIn nomfichierOut\n", name);
-  fprintf (fdo, "\t Assemble le fichier dont le nom est donné par nomfichierIn\n");
-  fprintf (fdo, "\t Le résultat est mis dans le fichier dont le nom est donné par nomfichierOut\n");
+  fprintf (fdo, "Usage: %s input_file output_file\n", name);
+  fprintf (fdo, "\t Assembles input_file to output_file\n");
 }
 
 int
@@ -43,13 +42,13 @@ main (int argc, char *argv[])
     }
   if ((fdi = fopen (argv[1], "r")) == NULL)
     {
-      fprintf (stderr, "Erreur à l'ouverture du fichier %s: %s\n", argv[1],
+      fprintf (stderr, "Error opening file %s: %s\n", argv[1],
 	       strerror (errno));
       return EXIT_FAILURE;
     }
   if ((fdo = fopen (argv[2], "wb")) == NULL)
     {
-      fprintf (stderr, "Erreur à l'ouverture du fichier %s: %s\n", argv[2],
+      fprintf (stderr, "Error opening file %s: %s\n", argv[2],
 	       strerror (errno));
       return EXIT_FAILURE;
     }
