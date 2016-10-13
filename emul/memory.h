@@ -43,7 +43,7 @@ extern void writeWord (unsigned int address, unsigned int word);
  */
 extern void loadMemoryFromFile (FILE * fdi);
 
-/* Récuperer l'adresse REELLE d'une cellule mémoire de l'émulateur */
+/* Returns the REAL address of a memory cell of SIPRO */
 extern void *address (unsigned int a);
 
 extern void dumpMemory (void);

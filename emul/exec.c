@@ -28,6 +28,7 @@
 #define ABS(x) ((x>=0) ? x : -x)
 
 extern bool trace;
+extern bool stack;
 
 static struct
 {
@@ -87,7 +88,7 @@ static short int opcodes[] = {
   0x6d, 0x6e, 0x6f, 0x00, 0xff, -1
 };
 
-/* Ne sert qu'en mode tracage */
+/* Used only in trace mode */
 static char const *instr[] = {
   "shiftr", "shiftl", "and", "or", "xor", "not", "add", "sub", "mul", "div",
   "cp", "loadw", "storew", "loadb", "storeb", "const", "push", "pop", "cmp",
@@ -109,7 +110,7 @@ setCarry (int v)
       sipro.registers[ID_FL] |= (1U << 1U);
       break;
     default:
-      fprintf (stderr, "Erreur: setCarry appelé avec la valeur %d\n", v);
+      fprintf (stderr, "Error: setCarry invoked with value %d\n", v);
       exit (EXIT_FAILURE);
       break;
     }
@@ -127,7 +128,7 @@ setError (int v)
       sipro.registers[ID_FL] |= (1U << 0U);
       break;
     default:
-      fprintf (stderr, "Erreur: setError appelé avec la valeur %d\n", v);
+      fprintf (stderr, "Error: setError invoked with value %d\n", v);
       exit (EXIT_FAILURE);
       break;
     }
@@ -145,7 +146,7 @@ setZero (int v)
       sipro.registers[ID_FL] |= (1U << 2U);
       break;
     default:
-      fprintf (stderr, "Erreur: setZero appelé avec la valeur %d\n", v);
+      fprintf (stderr, "Error: setZero invoked with value %d\n", v);
       exit (EXIT_FAILURE);
       break;
     }
@@ -210,7 +211,7 @@ shiftr_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction shiftr\n",
+	       "Error: invalid register %u for instruction shiftr\n",
 	       regIndex);
       return 0;
     }
@@ -231,7 +232,7 @@ shiftl_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction shiftl\n",
+	       "Error: invalid register %u for instruction shiftl\n",
 	       regIndex);
       return 0;
     }
@@ -262,7 +263,7 @@ and_f (void)
 	  && regIndex2 != ID_BX && regIndex2 != ID_CX && regIndex2 != ID_DX))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction and\n",
+	       "Error: invalid registers %u and %u for instruction and\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -288,7 +289,7 @@ or_f (void)
 	  && regIndex2 != ID_BX && regIndex2 != ID_CX && regIndex2 != ID_DX))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction or\n",
+	       "Error: invalid registers %u and %u for instruction or\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -314,7 +315,7 @@ xor_f (void)
 	  && regIndex2 != ID_BX && regIndex2 != ID_CX && regIndex2 != ID_DX))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction xor\n",
+	       "Error: invalid registers %u and %u for instruction xor\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -335,7 +336,7 @@ not_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction not\n",
+	       "Error: invalid register %u for instruction not\n",
 	       regIndex);
       return 0;
     }
@@ -400,7 +401,7 @@ add_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction add\n",
+	       "Error: invalid registers %u and %u for instruction add\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -432,7 +433,7 @@ sub_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction sub\n",
+	       "Error: invalid registers %u and %u for instruction sub\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -503,7 +504,7 @@ mul_f (void)
 	  && regIndex2 != ID_BX && regIndex2 != ID_CX && regIndex2 != ID_DX))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction mul\n",
+	       "Error: invalid registers %u and %u for instruction mul\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -534,7 +535,7 @@ div_f (void)
 	  && regIndex2 != ID_BX && regIndex2 != ID_CX && regIndex2 != ID_DX))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction div\n",
+	       "Error: invalid registers %u and %u for instruction div\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -577,7 +578,7 @@ cp_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction cp\n",
+	       "Error: invalid registers %u and %u for instruction cp\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -607,7 +608,7 @@ loadw_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction loadw\n",
+	       "Error: invalid registers %u and %u for instruction loadw\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -637,7 +638,7 @@ storew_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction storew\n",
+	       "Error: invalid registers %u and %u for instruction storew\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -668,7 +669,7 @@ loadb_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction loadb\n",
+	       "Error: invalid registers %u and %u for instruction loadb\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -699,7 +700,7 @@ storeb_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction storeb\n",
+	       "Error: invalid registers %u and %u for instruction storeb\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -723,7 +724,7 @@ const_f (void)
       && regIndex != ID_DX && regIndex != ID_SP && regIndex != ID_BP)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction const\n",
+	       "Error: invalid register %u for instruction const\n",
 	       regIndex);
       return 0;
     }
@@ -754,7 +755,7 @@ push_f (void)
       && regIndex != ID_DX && regIndex != ID_BP && regIndex != ID_SP)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction push\n",
+	       "Error: invalid register %u for instruction push\n",
 	       regIndex);
       return 0;
     }
@@ -779,7 +780,7 @@ pop_f (void)
       && regIndex != ID_DX && regIndex != ID_BP && regIndex != ID_SP)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction pop\n",
+	       "Error: invalid register %u for instruction pop\n",
 	       regIndex);
       return 0;
     }
@@ -816,7 +817,7 @@ cmp_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction cmp\n",
+	       "Error: invalid registers %u and %u for instruction cmp\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -846,7 +847,7 @@ uless_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction uless\n",
+	       "Error: invalid registers %u and %u for instruction uless\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -875,7 +876,7 @@ sless_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction sless\n",
+	       "Error: invalid registers %u and %u for instruction sless\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -896,7 +897,7 @@ jmp_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction jmp\n",
+	       "Error: invalid register %u for instruction jmp\n",
 	       regIndex);
       return 0;
     }
@@ -914,7 +915,7 @@ jmpz_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction jmpz\n",
+	       "Error: invalid register %u for instruction jmpz\n",
 	       regIndex);
       return 0;
     }
@@ -932,7 +933,7 @@ jmpc_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction jmpc\n",
+	       "Error: invalid register %u for instruction jmpc\n",
 	       regIndex);
       return 0;
     }
@@ -950,7 +951,7 @@ jmpe_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction jmpe\n",
+	       "Error: invalid register %u for instruction jmpe\n",
 	       regIndex);
       return 0;
     }
@@ -968,7 +969,7 @@ call_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction call\n",
+	       "Error: invalid register %u for instruction call\n",
 	       regIndex);
       return 0;
     }
@@ -1001,7 +1002,7 @@ callprintfd_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction callprintfd\n",
+	       "Error: invalid register %u for instruction callprintfd\n",
 	       regIndex);
       return 0;
     }
@@ -1024,7 +1025,7 @@ callprintfu_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction callprintfu\n",
+	       "Error: invalid register %u for instruction callprintfu\n",
 	       regIndex);
       return 0;
     }
@@ -1046,7 +1047,7 @@ callprintfs_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction callprintfs\n",
+	       "Error: invalid register %u for instruction callprintfs\n",
 	       regIndex);
       return 0;
     }
@@ -1068,7 +1069,7 @@ callscanfd_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction callscanfd\n",
+	       "Error: invalid register %u for instruction callscanfd\n",
 	       regIndex);
       return 0;
     }
@@ -1097,7 +1098,7 @@ callscanfu_f (void)
       && regIndex != ID_BX && regIndex != ID_CX && regIndex != ID_DX)
     {
       fprintf (stderr,
-	       "Erreur: registre %u invalide pour l'instruction callscanfu\n",
+	       "Error: invalid register %u for instruction callscanfu\n",
 	       regIndex);
       return 0;
     }
@@ -1134,7 +1135,7 @@ callscanfs_f (void)
 	  && regIndex2 != ID_DX && regIndex2 != ID_SP && regIndex2 != ID_BP))
     {
       fprintf (stderr,
-	       "Erreur: registres %u et %u invalides pour l'instruction callscanfs\n",
+	       "Error: invalid registers %u and %u for instruction callscanfs\n",
 	       regIndex1, regIndex2);
       return 0;
     }
@@ -1171,22 +1172,24 @@ printSIPRO ()
 {
   unsigned int i;
   for (i = 0U; regs[i] != NULL; ++i)
-    fprintf (stderr, "Registre %s = %u (%d) [%x]\n",
+    fprintf (stderr, "Register %s = %u (%d) [%x]\n",
 	     regs[i], sipro.registers[i],
 	     (int) registerToLongInt (sipro.registers[i]),
 	     sipro.registers[i]);
   fprintf (stderr, "\n");
-  for (int i = 10; i >= -10; --i)
-    {
-      unsigned int j;
-      if (((int) registerToLongInt (sipro.registers[ID_BP])) + 2 * i >= 0)
-	{
-	  readWord (sipro.registers[ID_BP] + 2 * i, &j);
-	  fprintf (stderr, "bp+%d (%d): %u\n", 2 * i,
-		   sipro.registers[ID_BP] + 2 * i, j);
-	}
-    }
-  fprintf (stderr, "\n");
+  if (stack) {
+    for (int i = 10; i >= -10; --i)
+      {
+	unsigned int j;
+	if (((int) registerToLongInt (sipro.registers[ID_BP])) + 2 * i >= 0)
+	  {
+	    readWord (sipro.registers[ID_BP] + 2 * i, &j);
+	    fprintf (stderr, "bp+%d (%d): %u\n", 2 * i,
+		     sipro.registers[ID_BP] + 2 * i, j);
+	  }
+      }
+    fprintf (stderr, "\n");
+  }
 }
 
 /* Execute la prochaine instruction */
@@ -1202,11 +1205,11 @@ execute ()
 	;
       if (opcodes[i] == -1)
 	{
-	  fprintf (stderr, "Erreur: opcode %u non reconnu !\n", opcode);
+	  fprintf (stderr, "Error: opcode %u unknown !\n", opcode);
 	  return 0;
 	}
       if (trace) {
-	fprintf (stderr, "Execution de l'instruction IP=%u %x -> %x %s\n",
+	fprintf (stderr, "Execution of instruction IP=%u %x -> %x %s\n",
 		 sipro.registers[ID_IP], sipro.registers[ID_IP],
 		 (unsigned int) opcode, instr[i]);
 	printSIPRO ();
@@ -1214,7 +1217,7 @@ execute ()
       if (!(*(pt_fct[i])) ())
 	{
 	  fprintf (stderr,
-		   "Erreur: l'exécution de l'instruction %u a échoué !\n",
+		   "Error: execution of instruction %u failed !\n",
 		   opcode);
 	  return 0;
 	}

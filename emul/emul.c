@@ -29,8 +29,8 @@
 
 extern int startProg ();
 
-       bool trace = false;
-static bool dump  = false;
+bool trace = false;
+bool stack = false;
 
 static void
 usage (FILE * fdo, const char *name, const char *prog)
@@ -39,6 +39,7 @@ usage (FILE * fdo, const char *name, const char *prog)
   fprintf (fdo, "\t Runs %s on SIPRO\n", prog);
   fprintf (fdo, "\t -t: trace mode\n");
   fprintf (fdo, "\t -d: dump memory at end of execution\n");
+  fprintf (fdo, "\t -s: print stack in trace mode\n");
   fprintf (fdo, "\t -h: print this message and exit\n");
 }
 
@@ -47,13 +48,14 @@ main (int argc, char *argv[])
 {
   FILE *fdi;
   int opt;
+  bool dump = false;
   if (argc < 2)
     {
       usage (stderr, argv[0], argv[1]);
       return EXIT_FAILURE;
     }
 
-  while ((opt = getopt(argc, argv, "tdh")) != -1) {
+  while ((opt = getopt(argc, argv, "tdsh")) != -1) {
     switch (opt) {
     case 't':
       trace = true;
@@ -61,6 +63,9 @@ main (int argc, char *argv[])
     case 'd':
       dump = true;
       break;
+    case 's':
+      stack = true;
+    break;
     case 'h':
     default: /* '?' */
       usage (stderr, argv[0], argv[1]);
@@ -70,7 +75,7 @@ main (int argc, char *argv[])
 	       
   if ((fdi = fopen (argv[optind], "rb")) == NULL)
     {
-      fprintf (stderr, "Erreur à l'ouverture du fichier %s: %s\n",
+      fprintf (stderr, "Error opening file %s: %s\n",
 	       argv[optind], strerror (errno));
       return EXIT_FAILURE;
     }
