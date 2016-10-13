@@ -24,9 +24,12 @@
 #include <string.h>
 #include "analyse.h"
 
+#define NAME_VERSION "ASIPRO V2.0"
+
 void
 usage (FILE * fdo, const char *name)
 {
+  fprintf (fdo, NAME_VERSION "\n"); 
   fprintf (fdo, "Usage: %s input_file output_file\n", name);
   fprintf (fdo, "\t Assembles input_file to output_file\n");
 }
