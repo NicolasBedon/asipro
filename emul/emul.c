@@ -27,6 +27,8 @@
 #include <getopt.h>
 #include "memory.h"
 
+#define NAME_VERSION "SIPRO V2.0"
+
 extern int startProg ();
 
 bool trace = false;
@@ -35,6 +37,7 @@ bool stack = false;
 static void
 usage (FILE * fdo, const char *name, const char *prog)
 {
+  fprintf (fdo, NAME_VERSION "\n");
   fprintf (fdo, "Usage: %s [-t] [-d] [-h] file\n", name);
   fprintf (fdo, "\t Runs %s on SIPRO\n", prog);
   fprintf (fdo, "\t -t: trace mode\n");
