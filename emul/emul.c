@@ -39,7 +39,7 @@ usage (FILE * fdo, const char *name, const char *prog)
 {
   fprintf (fdo, NAME_VERSION "\n");
   fprintf (fdo, "Usage: %s [-t] [-d] [-h] file\n", name);
-  fprintf (fdo, "\t Runs %s on SIPRO\n", prog);
+  fprintf (fdo, "\t Runs <file> on SIPRO\n");
   fprintf (fdo, "\t -t: trace mode\n");
   fprintf (fdo, "\t -d: dump memory at end of execution\n");
   fprintf (fdo, "\t -s: print stack in trace mode\n");
