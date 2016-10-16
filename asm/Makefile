@@ -18,7 +18,7 @@
 
 SHELL=/bin/sh
 
-CCOPTS=-DDEBUG -g -pg -std=c99 -pedantic -Wall -Wpointer-arith -pg
+CCOPTS=-DDEBUG -g -pg -std=c11 -pedantic -Wall -Wpointer-arith -pg
 CC=gcc
 
 BIN=asipro

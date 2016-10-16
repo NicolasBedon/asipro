@@ -18,7 +18,7 @@
 
 SHELL=/bin/sh
 
-CCOPTS=-posix -g -pg -std=c99 -pedantic -Wall -Wpointer-arith
+CCOPTS=-posix -g -pg -std=c11 -pedantic -Wall -Wpointer-arith
 #CCOPTS=-g -std=c99 -pedantic -Wall -Wpointer-arith
 CC=gcc
 
