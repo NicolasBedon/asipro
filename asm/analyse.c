@@ -29,7 +29,7 @@
 #define MAXLINE 2048U
 
 /* Nombre max. de symboles */
-#define MAXSYMBOLES 10000U
+#define MAXSYMBOLS 10000U
 
 static int shiftr_f (const char *ligne,
 		     unsigned int nligne, unsigned int *ncellule);
@@ -138,7 +138,7 @@ typedef struct
   long int valeur;
 } Symbole;
 
-static Symbole symboleTable[MAXSYMBOLES];
+static Symbole symboleTable[MAXSYMBOLS];
 
 /* Indice de la première position non occupée dans la table */
 static unsigned nextSymbole = 0U;
@@ -215,10 +215,10 @@ findSymbole (const char *const s, Symbole ** r)
 {
   unsigned int i;
   for (i = 0U;
-       i < MAXSYMBOLES && i < nextSymbole && strcmp (s, symboleTable[i].nom);
+       i < MAXSYMBOLS && i < nextSymbole && strcmp (s, symboleTable[i].nom);
        ++i)
     ;
-  if (i == MAXSYMBOLES || i == nextSymbole)
+  if (i == MAXSYMBOLS || i == nextSymbole)
     return 0;
   *r = &symboleTable[i];
   return 1;
@@ -231,7 +231,7 @@ addSymbole (const char *const s)
   Symbole *r;
   if (symbolePasse == 2)
     return 1;
-  if (nextSymbole == MAXSYMBOLES)
+  if (nextSymbole == MAXSYMBOLS)
     {
       fprintf (erroutput, "Error: table of symbols is full."
 	       "Can not insert %s\n", s);
