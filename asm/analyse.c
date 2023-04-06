@@ -1,7 +1,7 @@
-/* Time-stamp: <analyse.c  13 Feb 02 17:12:51> */
+/* Time-stamp: <analyse.c   6 avr 23 21:34:03> */
 
 /*
-  Copyright 2001-2016 Nicolas Bedon 
+  Copyright 2001-2023 Nicolas Bedon 
   This file is part of ASIPRO.
 
   ASIPRO is free software: you can redistribute it and/or modify
@@ -130,7 +130,7 @@ shiftr_f, shiftl_f, and_f, or_f, xor_f, not_f, add_f, sub_f, mul_f, div_f,
  (isalpha())
  **********************************************************
  */
-#define SYMBOLE_NOTDEFINED LONG_MAX
+#define SYMBOL_NOTDEFINED LONG_MAX
 
 typedef struct
 {
@@ -138,13 +138,13 @@ typedef struct
   long int valeur;
 } Symbole;
 
-static Symbole symboleTable[MAXSYMBOLS];
+static Symbole symbolTable[MAXSYMBOLS];
 
 /* Indice de la première position non occupée dans la table */
-static unsigned nextSymbole = 0U;
+static unsigned nextSymbol = 0U;
 
 /* Numéro de la passe */
-static char symbolePasse = 1;
+static char symbolPass = 1;
 /**********************************************************
  Fin de la table des symboles 
  **********************************************************
@@ -169,13 +169,13 @@ outputBytes (const unsigned char *buf,
   /* Si des symboles ont été introduits dans la table et qu'ils n'ont pas 
      encore été résolus, c'est le moment de le faire !
    */
-  for (i = ((long int) nextSymbole) - 1L;
-       i >= 0 && symboleTable[i].valeur == SYMBOLE_NOTDEFINED; --i)
-    symboleTable[i].valeur = *ncellules;
+  for (i = ((long int) nextSymbol) - 1L;
+       i >= 0 && symbolTable[i].valeur == SYMBOL_NOTDEFINED; --i)
+    symbolTable[i].valeur = *ncellules;
   /* Maintenant on peut procéder à l'écriture, mais seulement si on
      est dans la seconde passe. Sinon on fait comme si
    */
-  if (symbolePasse == 2)
+  if (symbolPass == 2)
     if (fwrite (buf, n, 1, fdo) != 1)
       {
 	fprintf (erroutput, "Error while writing in output file\n");
@@ -215,12 +215,12 @@ findSymbole (const char *const s, Symbole ** r)
 {
   unsigned int i;
   for (i = 0U;
-       i < MAXSYMBOLS && i < nextSymbole && strcmp (s, symboleTable[i].nom);
+       i < MAXSYMBOLS && i < nextSymbol && strcmp (s, symbolTable[i].nom);
        ++i)
     ;
-  if (i == MAXSYMBOLS || i == nextSymbole)
+  if (i == MAXSYMBOLS || i == nextSymbol)
     return 0;
-  *r = &symboleTable[i];
+  *r = &symbolTable[i];
   return 1;
 }
 
@@ -229,9 +229,9 @@ static int
 addSymbole (const char *const s)
 {
   Symbole *r;
-  if (symbolePasse == 2)
+  if (symbolPass == 2)
     return 1;
-  if (nextSymbole == MAXSYMBOLS)
+  if (nextSymbol == MAXSYMBOLS)
     {
       fprintf (erroutput, "Error: table of symbols is full."
 	       "Can not insert %s\n", s);
@@ -242,14 +242,14 @@ addSymbole (const char *const s)
       fprintf (erroutput, "Error: symbol %s already defined\n", s);
       return 0;
     }
-  if ((symboleTable[nextSymbole].nom = malloc (strlen (s) + 1)) == NULL)
+  if ((symbolTable[nextSymbol].nom = malloc (strlen (s) + 1)) == NULL)
     {
       fprintf (erroutput, "Error: memory allocation (addSymbole %s)\n", s);
       exit (EXIT_FAILURE);
     }
-  strcpy (symboleTable[nextSymbole].nom, s);
-  symboleTable[nextSymbole].valeur = SYMBOLE_NOTDEFINED;
-  ++nextSymbole;
+  strcpy (symbolTable[nextSymbol].nom, s);
+  symbolTable[nextSymbol].valeur = SYMBOL_NOTDEFINED;
+  ++nextSymbol;
   return 1;
 }
 
@@ -258,9 +258,9 @@ printSymboleTable (FILE * fdo)
 {
   unsigned int i;
   fprintf (fdo, "Table of symbols:\n");
-  for (i = 0U; i < nextSymbole; ++i)
-    fprintf (fdo, "%s: %o (octal)\n", symboleTable[i].nom,
-	     (int) symboleTable[i].valeur);
+  for (i = 0U; i < nextSymbol; ++i)
+    fprintf (fdo, "%s: %o (octal)\n", symbolTable[i].nom,
+	     (int) symbolTable[i].valeur);
 }
 
 static int
@@ -925,9 +925,9 @@ const_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
     {
       Symbole *r;
       int a = findSymbole (sep + 1, &r);
-      if ((!a) || (r->valeur == SYMBOLE_NOTDEFINED))
+      if ((!a) || (r->valeur == SYMBOL_NOTDEFINED))
 	{
-	  if (symbolePasse == 2)
+	  if (symbolPass == 2)
 	    {
 	      fprintf (erroutput, "Error: %s line %u"
 		       "Symbol %s not found in symbols table,"
@@ -1488,7 +1488,7 @@ traiteConstante (const char *ligne,
       /* Il faut réaliser l'alignement */
       if ((*ncellule) % 2 == 1)
 	{
-	  if (symbolePasse == 2)
+	  if (symbolPass == 2)
 	    if (fwrite ("\0", 1, 1, output) != 1)
 	      {
 		fprintf (erroutput,
@@ -1553,7 +1553,7 @@ traiteConstante (const char *ligne,
       /* Il faut réaliser l'alignement */
       if ((*ncellule) % 2 == 1)
 	{
-	  if (symbolePasse == 2)
+	  if (symbolPass == 2)
 	    if (fwrite ("\0", 1, 1, output) != 1)
 	      {
 		fprintf (erroutput,
@@ -1645,13 +1645,13 @@ assemblage (FILE * fdi, FILE * fdo, FILE * fde)
   input = fdi;
   output = fdo;
   erroutput = fde;
-  symbolePasse = 1;
+  symbolPass = 1;
   if (!analyse ())
     {
       fprintf (erroutput, "Error in first pass\n");
       return 1;
     }
-  symbolePasse = 2;
+  symbolPass = 2;
   rewind (fdi);
   if (!analyse ())
     {

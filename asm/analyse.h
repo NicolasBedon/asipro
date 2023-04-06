@@ -1,7 +1,7 @@
-/* Time-stamp: <analyse.h   7 Oct 01 12:44:54> */
+/* Time-stamp: <analyse.h   6 avr 23 21:33:17> */
 
 /*
-  Copyright 2001-2016 Nicolas Bedon 
+  Copyright 2001-2023 Nicolas Bedon 
   This file is part of ASIPRO.
 
   ASIPRO is free software: you can redistribute it and/or modify
