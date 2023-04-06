@@ -1,5 +1,5 @@
 
-  # Copyright 2001-2016 Nicolas Bedon 
+  # Copyright 2001-2023 Nicolas Bedon 
   # This file is part of ASIPRO.
 
   # ASIPRO is free software: you can redistribute it and/or modify
