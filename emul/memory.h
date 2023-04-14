@@ -1,7 +1,7 @@
-/* Time-stamp: <memory.h  13 Oct 01 19:37:08> */
+/* Time-stamp: <memory.h  14 avr 23 12:06:45> */
 
 /*
-  Copyright 2001-2016 Nicolas Bedon 
+  Copyright 2001-2023 Nicolas Bedon 
   This file is part of SIPRO.
 
   SIPRO is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@
 extern void readByte (unsigned int address, unsigned char *byte);
 extern void writeByte (unsigned int address, unsigned char byte);
 
-/* A function for reading/writing a word verify the alignment of the address.
+/* A function for reading/writing a word verifies the alignment of the address.
    The address must be a multiple of the size of a word, in bytes.
    If incorrect, the function writes a message on the standard error
    (bus error, segmentation violation), and stop

@@ -1,7 +1,7 @@
-/* Time-stamp: <exec.c  27 Aug 02 20:05:14> */
+/* Time-stamp: <exec.c  14 avr 23 12:07:25> */
 
 /*
-  Copyright 2001-2016 Nicolas Bedon 
+  Copyright 2001-2023 Nicolas Bedon 
   This file is part of SIPRO.
 
   SIPRO is free software: you can redistribute it and/or modify

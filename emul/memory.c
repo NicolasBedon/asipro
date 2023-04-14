@@ -1,7 +1,7 @@
-/* Time-stamp: <memory.c  13 Oct 01 21:15:13> */
+/* Time-stamp: <memory.c  14 avr 23 12:10:17> */
 
 /*
-  Copyright 2001-2016 Nicolas Bedon 
+  Copyright 2001-2023 Nicolas Bedon 
   This file is part of SIPRO.
 
   SIPRO is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include "../sipro.h"
 
-/* Taille de la mémoire */
+/* Memory size */
 #define MEMSIZE 32768
 
 static unsigned char memory[MEMSIZE];
@@ -49,7 +49,7 @@ writeByte (unsigned int address, unsigned char byte)
   memory[address] = byte;
 }
 
-/* A function for reading/writing a word verify the alignment of the address.
+/* A function for reading/writing a word verifies the alignment of the address.
    The address must be a multiple of the size of a word, in bytes.
    If incorrect, the function writes a message on the standard error
    (bus error, segmentation violation), and stop
@@ -92,7 +92,7 @@ loadMemoryFromFile (FILE * input)
     }
 }
 
-/* Récupérer l'adresse REELLE d'une cellule mémoire de l'émulateur */
+/* Returns the REAL address of a memory cell of SIPRO */
 void *
 address (unsigned int a)
 {
