@@ -1,4 +1,4 @@
-/* Time-stamp: <exec.c  14 avr 23 12:07:25> */
+/* Time-stamp: <exec.c  14 avr 23 13:09:03> */
 
 /*
   Copyright 2001-2023 Nicolas Bedon 
@@ -1192,7 +1192,7 @@ printSIPRO ()
   }
 }
 
-/* Execute la prochaine instruction */
+/* Execution of the program */
 static int
 execute ()
 {
@@ -1226,7 +1226,7 @@ execute ()
   return 1;
 }
 
-/* Démarre le programme */
+/* Starts the program execution */
 int
 startProg ()
 {
