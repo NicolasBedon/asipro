@@ -1,4 +1,4 @@
-/* Time-stamp: <exec.c  14 avr 23 13:09:03> */
+/* Time-stamp: <exec.c  14 avr 23 14:08:56> */
 
 /*
   Copyright 2001-2023 Nicolas Bedon 
@@ -24,8 +24,8 @@
 #include "../sipro.h"
 #include "memory.h"
 
-#define BITPOS(reg,pos) ( ( (1U<<pos) & reg ) ? 1U : 0U)
-#define ABS(x) ((x>=0) ? x : -x)
+#define BITPOS(reg,pos) ( ( (1U<<(pos)) & (reg) ) ? 1U : 0U)
+#define ABS(x) (((x)>=0) ? (x) : -(x))
 
 extern bool trace;
 extern bool stack;
