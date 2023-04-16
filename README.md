@@ -5,5 +5,5 @@ This little project implements a virtual SImple PROcessor, named SIPRO, which is
 It contains:
 - an emulation program for SIPRO, also named *sipro*, whose source code is located in the *emul* repository
 - an assembly program for SIPRO, named *asipro*, whose source code is located in the *asm* repository
-- the documentation (in french) of SIPRO, located in the *doc* repository
+- the documentation (in french), located in the *doc* repository
 
