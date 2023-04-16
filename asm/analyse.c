@@ -1,4 +1,4 @@
-/* Time-stamp: <analyse.c   6 avr 23 21:34:03> */
+/* Time-stamp: <analyse.c  16 avr 23 10:01:36> */
 
 /*
   Copyright 2001-2023 Nicolas Bedon 
@@ -136,9 +136,9 @@ typedef struct
 {
   char *nom;
   long int valeur;
-} Symbole;
+} Symbol;
 
-static Symbole symbolTable[MAXSYMBOLS];
+static Symbol symbolTable[MAXSYMBOLS];
 
 /* Indice de la première position non occupée dans la table */
 static unsigned nextSymbol = 0U;
@@ -154,7 +154,7 @@ static char symbolPass = 1;
 static FILE *input, *output, *erroutput;
 
 static int
-findRegisterIndex (const char *name, idRegister * r)
+find_register_index (const char *name, idRegister * r)
 {
   for (*r = 0U; regs[*r] != NULL && strcmp (name, regs[*r]); ++*r)
     ;
@@ -187,7 +187,7 @@ outputBytes (const unsigned char *buf,
 }
 
 static int
-codeValue (long int v, unsigned char dest[2])
+encodeValue (long int v, unsigned char dest[2])
 {
   if (v < 0 && v < SIPRO_INTMIN)
     return 0;
@@ -211,7 +211,7 @@ codeValue (long int v, unsigned char dest[2])
 }
 
 static int
-findSymbole (const char *const s, Symbole ** r)
+find_symbol (const char *const s, Symbol ** r)
 {
   unsigned int i;
   for (i = 0U;
@@ -226,9 +226,9 @@ findSymbole (const char *const s, Symbole ** r)
 
 /* Ne fait rien et retourne toujours 1 lors de la seconde passe */
 static int
-addSymbole (const char *const s)
+add_symbol (const char *const s)
 {
-  Symbole *r;
+  Symbol *r;
   if (symbolPass == 2)
     return 1;
   if (nextSymbol == MAXSYMBOLS)
@@ -237,14 +237,14 @@ addSymbole (const char *const s)
 	       "Can not insert %s\n", s);
       return 0;
     }
-  if (findSymbole (s, &r))
+  if (find_symbol (s, &r))
     {
       fprintf (erroutput, "Error: symbol %s already defined\n", s);
       return 0;
     }
   if ((symbolTable[nextSymbol].nom = malloc (strlen (s) + 1)) == NULL)
     {
-      fprintf (erroutput, "Error: memory allocation (addSymbole %s)\n", s);
+      fprintf (erroutput, "Error: memory allocation (add_symbol %s)\n", s);
       exit (EXIT_FAILURE);
     }
   strcpy (symbolTable[nextSymbol].nom, s);
@@ -254,7 +254,7 @@ addSymbole (const char *const s)
 }
 
 static void
-printSymboleTable (FILE * fdo)
+printSymbolTable (FILE * fdo)
 {
   unsigned int i;
   fprintf (fdo, "Table of symbols:\n");
@@ -268,7 +268,7 @@ shiftr_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x10, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -291,7 +291,7 @@ shiftl_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x11, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -321,14 +321,14 @@ and_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -365,14 +365,14 @@ or_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -409,14 +409,14 @@ xor_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -446,7 +446,7 @@ not_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x1a, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -476,14 +476,14 @@ add_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -524,14 +524,14 @@ sub_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -572,14 +572,14 @@ mul_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -616,14 +616,14 @@ div_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -660,14 +660,14 @@ cp_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -708,14 +708,14 @@ loadw_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -756,14 +756,14 @@ storew_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -804,14 +804,14 @@ loadb_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -852,14 +852,14 @@ storeb_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -902,7 +902,7 @@ const_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -923,8 +923,8 @@ const_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   /* La valeur peut être soit une valeur, soit un label */
   if (isalpha ((int) (*(sep + 1))))
     {
-      Symbole *r;
-      int a = findSymbole (sep + 1, &r);
+      Symbol *r;
+      int a = find_symbol (sep + 1, &r);
       if ((!a) || (r->valeur == SYMBOL_NOTDEFINED))
 	{
 	  if (symbolPass == 2)
@@ -956,7 +956,7 @@ const_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 	  return 0;
 	}
     }
-  if (!codeValue (valeur, trou ? buf + 3 : buf + 2))
+  if (!encodeValue (valeur, trou ? buf + 3 : buf + 2))
     {
       fprintf (erroutput, "Error: %s line %u"
 	       " : constant %ld has an incorrect value\n",
@@ -976,7 +976,7 @@ push_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x40, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1001,7 +1001,7 @@ pop_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x41, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1033,14 +1033,14 @@ cmp_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1081,14 +1081,14 @@ uless_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1129,14 +1129,14 @@ sless_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1170,7 +1170,7 @@ jmp_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x60, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1193,7 +1193,7 @@ jmpz_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x61, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1216,7 +1216,7 @@ jmpc_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x62, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1239,7 +1239,7 @@ jmpe_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x63, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1262,7 +1262,7 @@ call_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x65, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1292,7 +1292,7 @@ callprintfd_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x6a, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1315,7 +1315,7 @@ callprintfu_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x6b, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1338,7 +1338,7 @@ callprintfs_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x6c, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1361,7 +1361,7 @@ callscanfd_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x6d, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1384,7 +1384,7 @@ callscanfu_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   idRegister regIndex;
   unsigned char buf[] = { 0x6e, 0 };
-  if (!(findRegisterIndex (ligne, &regIndex)))
+  if (!(find_register_index (ligne, &regIndex)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1414,14 +1414,14 @@ callscanfs_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   *sep = '\0';
-  if (!(findRegisterIndex (ligne, &regIndex1)))
+  if (!(find_register_index (ligne, &regIndex1)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
       *sep = ',';
       return 0;
     }
-  if (!(findRegisterIndex (sep + 1, &regIndex2)))
+  if (!(find_register_index (sep + 1, &regIndex2)))
     {
       fprintf (erroutput, "Error: unknown "
 	       "register: %s line %u\n", ligne, nligne);
@@ -1461,7 +1461,7 @@ end_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 }
 
 static int
-traiteConstante (const char *ligne,
+read_constant (const char *ligne,
 		 unsigned int nligne, unsigned int *ncellule)
 {
   char *sep, *p;
@@ -1541,7 +1541,7 @@ traiteConstante (const char *ligne,
 	  *sep = ' ';
 	  return 0;
 	}
-      if (!codeValue (valeur, buf))
+      if (!encodeValue (valeur, buf))
 	{
 	  fprintf (erroutput, "Error: %s line %u"
 		   " : constant %ld has an incorrect value\n",
@@ -1574,7 +1574,7 @@ traiteConstante (const char *ligne,
 }
 
 static int
-traiteInstruction (const char *ligne,
+read_instruction (const char *ligne,
 		   unsigned int nligne, unsigned int *ncellule)
 {
   unsigned int i;
@@ -1610,11 +1610,11 @@ analyse (void)
       switch (ligne[0])
 	{
 	case '@':		/* Directive de placement de constante */
-	  if (!traiteConstante (ligne + 1, nligne, &ncellule))
+	  if (!read_constant (ligne + 1, nligne, &ncellule))
 	    return 0;
 	  break;
 	case ':':		/* Label                               */
-	  if (!addSymbole (ligne + 1))
+	  if (!add_symbol (ligne + 1))
 	    {
 	      fprintf (erroutput,
 		       "Error adding %s to symbols table\n",
@@ -1626,7 +1626,7 @@ analyse (void)
 	case '\0':		/* Ligne vide                          */
 	  break;
 	case '\t':		/* Instruction                         */
-	  if (!traiteInstruction (ligne + 1, nligne, &ncellule))
+	  if (!read_instruction (ligne + 1, nligne, &ncellule))
 	    return 0;
 	  break;
 	default:
@@ -1640,7 +1640,7 @@ analyse (void)
 }
 
 int
-assemblage (FILE * fdi, FILE * fdo, FILE * fde)
+assemble (FILE * fdi, FILE * fdo, FILE * fde)
 {
   input = fdi;
   output = fdo;
@@ -1658,6 +1658,6 @@ assemblage (FILE * fdi, FILE * fdo, FILE * fde)
       fprintf (erroutput, "Error in second pass\n");
       return 1;
     }
-  printSymboleTable (fde);
+  printSymbolTable (fde);
   return 0;
 }

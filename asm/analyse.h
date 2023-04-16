@@ -1,4 +1,4 @@
-/* Time-stamp: <analyse.h   6 avr 23 21:33:17> */
+/* Time-stamp: <analyse.h  16 avr 23 09:54:49> */
 
 /*
   Copyright 2001-2023 Nicolas Bedon 
@@ -21,6 +21,6 @@
 #ifndef _ANALYSE_H
 #define _ANALYSE_H
 
-extern int assemblage (FILE * fdi, FILE * fdo, FILE * fde);
+extern int assemble (FILE * fdi, FILE * fdo, FILE * fde);
 
 #endif

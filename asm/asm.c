@@ -1,4 +1,4 @@
-/* Time-stamp: <asm.c   6 avr 23 21:38:16> */
+/* Time-stamp: <asm.c  16 avr 23 09:55:06> */
 
 /*
   Copyright 2001-2023 Nicolas Bedon 
@@ -55,7 +55,7 @@ main (int argc, char *argv[])
 	       strerror (errno));
       return EXIT_FAILURE;
     }
-  const int r = assemblage (fdi, fdo, stderr);
+  const int r = assemble (fdi, fdo, stderr);
   fclose(fdi);
   fclose(fdo);
   return r;
