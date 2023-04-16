@@ -1,4 +1,4 @@
-/* Time-stamp: <analyse.c  16 avr 23 11:08:40> */
+/* Time-stamp: <analyse.c  16 avr 23 11:10:05> */
 
 /*
   Copyright 2001-2023 Nicolas Bedon 
@@ -162,7 +162,7 @@ find_register_index (const char *name, idRegister * r)
 }
 
 static int
-outputBytes (const unsigned char *buf,
+output_bytes (const unsigned char *buf,
 	     unsigned n, FILE * fdo, unsigned int *ncellules)
 {
   long int i;
@@ -283,7 +283,7 @@ shiftr_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -306,7 +306,7 @@ shiftl_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -350,7 +350,7 @@ and_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -394,7 +394,7 @@ or_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -438,7 +438,7 @@ xor_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -461,7 +461,7 @@ not_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -509,7 +509,7 @@ add_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -557,7 +557,7 @@ sub_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -601,7 +601,7 @@ mul_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -645,7 +645,7 @@ div_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -693,7 +693,7 @@ cp_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -741,7 +741,7 @@ loadw_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -789,7 +789,7 @@ storew_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -837,7 +837,7 @@ loadb_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -885,7 +885,7 @@ storeb_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -968,7 +968,7 @@ const_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 	   (int) buf[trou ? 4 : 3]);
   buf[1] = regIndex;
   *sep = ',';
-  return outputBytes (buf, trou ? 5U : 4U, output, ncellule);
+  return output_bytes (buf, trou ? 5U : 4U, output, ncellule);
 }
 
 static int
@@ -993,7 +993,7 @@ push_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1018,7 +1018,7 @@ pop_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1066,7 +1066,7 @@ cmp_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -1114,7 +1114,7 @@ uless_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -1162,7 +1162,7 @@ sless_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
@@ -1185,7 +1185,7 @@ jmp_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1208,7 +1208,7 @@ jmpz_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1231,7 +1231,7 @@ jmpc_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1254,7 +1254,7 @@ jmpe_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1277,14 +1277,14 @@ call_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
 ret_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   unsigned char buf[] = { 0x66 };
-  return outputBytes (buf, 1, output, ncellule);
+  return output_bytes (buf, 1, output, ncellule);
 }
 
 static int
@@ -1307,7 +1307,7 @@ callprintfd_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1330,7 +1330,7 @@ callprintfu_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1353,7 +1353,7 @@ callprintfs_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1376,7 +1376,7 @@ callscanfd_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1399,7 +1399,7 @@ callscanfu_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
       return 0;
     }
   buf[1] = regIndex;
-  return outputBytes (buf, 2, output, ncellule);
+  return output_bytes (buf, 2, output, ncellule);
 }
 
 static int
@@ -1443,21 +1443,21 @@ callscanfs_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
   *sep = ',';
   buf[1] = regIndex1;
   buf[2] = regIndex2;
-  return outputBytes (buf, 3, output, ncellule);
+  return output_bytes (buf, 3, output, ncellule);
 }
 
 static int
 nop_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   unsigned char buf[] = { 0x00 };
-  return outputBytes (buf, 1U, output, ncellule);
+  return output_bytes (buf, 1U, output, ncellule);
 }
 
 static int
 end_f (const char *ligne, unsigned int nligne, unsigned int *ncellule)
 {
   unsigned char buf[] = { 0xff };
-  return outputBytes (buf, 1U, output, ncellule);
+  return output_bytes (buf, 1U, output, ncellule);
 }
 
 static int
@@ -1522,7 +1522,7 @@ read_constant (const char *ligne,
 	      }
 	  else
 	    c = *p;
-	  r = outputBytes ((unsigned char *) &c, 1, output, ncellule);
+	  r = output_bytes ((unsigned char *) &c, 1, output, ncellule);
 	}
       *sep = ' ';
       *(sep + 2 + strlen (sep + 2)) = '\"';
@@ -1562,7 +1562,7 @@ read_constant (const char *ligne,
 	      }
 	  ++*ncellule;
 	}
-      return outputBytes (buf, 2, output, ncellule);
+      return output_bytes (buf, 2, output, ncellule);
     }
   else
     {				/* Erreur */
