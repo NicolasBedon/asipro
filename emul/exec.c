@@ -1,4 +1,4 @@
-/* Time-stamp: <exec.c  14 avr 23 14:08:56> */
+/* Time-stamp: <exec.c  16 avr 23 12:08:46> */
 
 /*
   Copyright 2001-2023 Nicolas Bedon 
@@ -93,7 +93,7 @@ static char const *instr[] = {
   "shiftr", "shiftl", "and", "or", "xor", "not", "add", "sub", "mul", "div",
   "cp", "loadw", "storew", "loadb", "storeb", "const", "push", "pop", "cmp",
   "uless", "sless", "jmp", "jmpz", "jmpc", "jmpe", "call", "ret",
-    "callprintfd",
+  "callprintfd",
   "callprintfu", "callprintfs", "callscanfd", "callscanfu", "callscanfs",
   "nop", "end", NULL
 };

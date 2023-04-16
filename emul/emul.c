@@ -1,7 +1,7 @@
-/* Time-stamp: <emul.c  13 Oct 01 20:21:54> */
+/* Time-stamp: <emul.c  16 avr 23 12:18:14> */
 
 /*
-  Copyright 2016 Nicolas Bedon 
+  Copyright 2016-2023 Nicolas Bedon 
   This file is part of SIPRO.
 
   SIPRO is free software: you can redistribute it and/or modify
@@ -37,13 +37,15 @@ bool stack = false;
 static void
 usage (FILE * fdo, const char *name, const char *prog)
 {
-  fprintf (fdo, NAME_VERSION "\n");
-  fprintf (fdo, "Usage: %s [-t] [-d] [-h] file\n", name);
-  fprintf (fdo, "\t Runs <file> on SIPRO\n");
-  fprintf (fdo, "\t -t: trace mode\n");
-  fprintf (fdo, "\t -d: dump memory at end of execution\n");
-  fprintf (fdo, "\t -s: print stack in trace mode\n");
-  fprintf (fdo, "\t -h: print this message and exit\n");
+  fprintf (fdo,
+	   NAME_VERSION "\n"
+	   "Usage: %s [-t] [-d] [-h] file\n"
+	   "Runs <file> on SIPRO\n"
+	   "\t -t: trace mode\n"
+	   "\t -d: dump memory at end of execution\n"
+	   "\t -s: print stack in trace mode\n"
+	   "\t -h: print this message and exit\n"
+	   ,name);
 }
 
 int
