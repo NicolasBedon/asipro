@@ -1,4 +1,4 @@
-/* Time-stamp: <sipro.h  12 Oct 01 11:44:27> */
+/* Time-stamp: <sipro.h  16 avr 23 12:24:11> */
 
 /*
   Copyright 2001-2016 Nicolas Bedon 
@@ -32,7 +32,7 @@
 
 #define SIPRO_NBREGISTERS 8U
 /* 
-   Les indices des éléments dans le tableau sont en corélation avec
+   Les indices des éléments dans le tableau sont en corrélation avec
    les valeurs du type énuméré
 */
 static char const * const regs[] = { "ip", "fl", "sp", "bp", "ax", "bx","cx", "dx", NULL};
