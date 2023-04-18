@@ -15,7 +15,7 @@
 ; along with ASIPRO.  If not, see <http://www.gnu.org/licenses/>.
 
 
-;  Hello World !
+; Hello World !
 
 ; Skip data area
 	const ax,start
