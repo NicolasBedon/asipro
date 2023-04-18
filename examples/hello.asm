@@ -26,7 +26,7 @@
 @string "Hello, world !\n"
 ; End of data area
 
-; main code
+; Main code
 :start
 ; Preparation of stack area (unuseful for this example)
 	const bp,stack
@@ -38,6 +38,6 @@
 	callprintfs dx
 	end
 
-; stack area
+; Stack area
 :stack
 @int 0

@@ -15,7 +15,7 @@
 ; along with ASIPRO.  If not, see <http://www.gnu.org/licenses/>.
 
 
-; Les tours de Hanoi, en recursif
+; Recursive Hanoi tours solver
 ; Nicolas Bedon
 
 	const ax,debut
@@ -28,9 +28,9 @@
 :chaineC
 @string "C"
 :chaine1
-@string "Je déplace "
+@string "Moving "
 :chaine2
-@string " vers "
+@string " to "
 :chaine3
 @string "\n"
 
@@ -133,7 +133,7 @@
 	pop sp
 	ret
 
-; Le main
+; Main code
 :debut
 	const bp,pile
 	const sp,pile
@@ -157,6 +157,6 @@
 	pop dx
 	end
 
-; La zone de pile
+; Stack area
 :pile
 @int 0
